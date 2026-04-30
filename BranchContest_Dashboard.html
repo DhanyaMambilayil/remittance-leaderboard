@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Branch Contest · Kuwait Remittance</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0f1e;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0f4ff;
+  --muted: #8892a4;
+  --gold: #f5c842;
+  --gold2: #e8a020;
+  --silver: #b0bec5;
+  --bronze: #cd8a5a;
+  --india: #ff7c2a;
+  --egypt: #22c987;
+  --purple: #a78bfa;
+  --blue: #60a5fa;
+  --red: #f87171;
+  --green: #4ade80;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(167,139,250,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(34,201,135,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 60% 30%, rgba(245,200,66,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+
+/* ── HEADER ── */
+.header {
+  padding: 20px 16px 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.header-left {}
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(245,200,66,0.12);
+  border: 1px solid rgba(245,200,66,0.25);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.header-badge .dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.header h1 span { color: var(--gold); }
+.header-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.header-pool {
+  text-align: right;
+  background: linear-gradient(135deg, rgba(245,200,66,0.15), rgba(232,160,32,0.08));
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: 14px;
+  padding: 10px 14px;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+.header-pool .pool-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.header-pool .pool-val { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--gold); line-height: 1.1; }
+.header-pool .pool-sub { font-size: 10px; color: var(--muted); }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 16px;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab.active {
+  background: var(--gold);
+  color: #0a0f1e;
+  border-color: var(--gold);
+  font-weight: 700;
+}
+
+/* ── KPI STRIP ── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent, var(--gold));
+}
+.kpi-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent, var(--gold));
+}
+.kpi-label { font-size: 10px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  padding: 0 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-sub { font-size: 11px; color: var(--muted); }
+
+/* ── LEADERBOARD CARDS ── */
+.lb-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+
+.lb-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s;
+  animation: slideIn 0.4s ease both;
+}
+.lb-card:active { transform: scale(0.98); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.lb-card.rank-1 { background: linear-gradient(135deg, #1a160a, #211a08); border-color: rgba(245,200,66,0.4); }
+.lb-card.rank-2 { background: linear-gradient(135deg, #111518, #161c20); border-color: rgba(176,190,197,0.3); }
+.lb-card.rank-3 { background: linear-gradient(135deg, #17120d, #1c1510); border-color: rgba(205,138,90,0.3); }
+
+.rank-badge {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.rank-badge.r1 { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #0a0f1e; box-shadow: 0 0 16px rgba(245,200,66,0.4); }
+.rank-badge.r2 { background: linear-gradient(135deg, #b0bec5, #78909c); color: #0a0f1e; }
+.rank-badge.r3 { background: linear-gradient(135deg, #cd8a5a, #a0522d); color: #fff; }
+.rank-badge.rn { background: var(--surface2); color: var(--muted); font-size: 13px; }
+
+.lb-info { flex: 1; min-width: 0; }
+.lb-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-area { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.lb-pts-breakdown {
+  display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap;
+}
+.lb-pill {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.pill-daily  { background: rgba(167,139,250,0.15); color: var(--purple); }
+.pill-india  { background: rgba(255,124,42,0.15);  color: var(--india); }
+.pill-egypt  { background: rgba(34,201,135,0.15);  color: var(--egypt); }
+.pill-bonus  { background: rgba(245,200,66,0.15);  color: var(--gold); }
+
+.lb-total {
+  text-align: right;
+  flex-shrink: 0;
+}
+.lb-total-pts {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.lb-total-pts.t1 { color: var(--gold); }
+.lb-total-pts.t2 { color: var(--silver); }
+.lb-total-pts.t3 { color: var(--bronze); }
+.lb-total-pts.tn { color: var(--text); }
+.lb-prize { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.lb-prize.has-prize { color: var(--gold); font-weight: 600; }
+
+/* ── PRIZE BANNER ── */
+.prize-banner {
+  margin: 8px 16px 16px;
+  background: linear-gradient(135deg, rgba(245,200,66,0.1), rgba(232,160,32,0.05));
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: 16px;
+  padding: 14px;
+}
+.prize-banner-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.prize-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.prize-item { text-align: center; }
+.prize-pos { font-size: 10px; color: var(--muted); }
+.prize-kd { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--gold); }
+
+/* ── CORRIDOR CARDS ── */
+.corridor-wrap { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.corridor-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.corridor-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.corridor-header.india { background: linear-gradient(90deg, rgba(255,124,42,0.2), transparent); border-bottom: 1px solid rgba(255,124,42,0.15); }
+.corridor-header.egypt { background: linear-gradient(90deg, rgba(34,201,135,0.2), transparent); border-bottom: 1px solid rgba(34,201,135,0.15); }
+.corridor-flag { font-size: 20px; }
+.corridor-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.corridor-sub { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+.corridor-rows { padding: 4px 0; }
+.corridor-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.corridor-row:last-child { border-bottom: none; }
+.cr-rank { font-size: 11px; color: var(--muted); width: 18px; text-align: center; font-weight: 600; }
+.cr-name { flex: 1; font-size: 13px; font-weight: 500; }
+.cr-pts { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.cr-pts.india { color: var(--india); }
+.cr-pts.egypt { color: var(--egypt); }
+.cr-bar-wrap { width: 50px; background: rgba(255,255,255,0.06); border-radius: 4px; height: 4px; }
+.cr-bar { height: 4px; border-radius: 4px; }
+.cr-bar.india { background: var(--india); }
+.cr-bar.egypt { background: var(--egypt); }
+
+/* ── AREA CARDS ── */
+.area-cards { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.area-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.area-bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.area-bar-bg { width: 6px; height: 60px; background: rgba(255,255,255,0.07); border-radius: 3px; position: relative; overflow: hidden; }
+.area-bar-fill { position: absolute; bottom: 0; left: 0; right: 0; border-radius: 3px; transition: height 1s ease; }
+.area-rank-badge { font-size: 10px; font-weight: 700; color: var(--muted); }
+.area-info { flex: 1; }
+.area-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.area-mgr { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.area-stats { display: flex; gap: 12px; margin-top: 8px; }
+.area-stat-val { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+.area-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.area-leader { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.area-leader span { color: var(--text); font-weight: 500; }
+
+/* ── ALL BRANCHES TABLE ── */
+.branch-table-wrap { padding: 0 16px; }
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 9px 14px;
+  margin-bottom: 10px;
+}
+.search-bar input {
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px;
+}
+.search-bar input::placeholder { color: var(--muted); }
+.search-icon { color: var(--muted); font-size: 14px; }
+
+.branch-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.branch-row:active { transform: scale(0.98); background: var(--surface2); }
+.br-rank { font-size: 12px; color: var(--muted); width: 22px; text-align: center; font-weight: 600; flex-shrink: 0; }
+.br-rank.top5 { color: var(--gold); font-weight: 800; }
+.br-info { flex: 1; min-width: 0; }
+.br-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.br-area { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.br-bar-col { width: 60px; }
+.br-bar-bg { background: rgba(255,255,255,0.07); border-radius: 3px; height: 4px; margin-bottom: 3px; }
+.br-bar-fill { height: 4px; border-radius: 3px; background: linear-gradient(90deg, var(--purple), var(--blue)); }
+.br-ach { font-size: 10px; color: var(--muted); text-align: center; }
+.br-pts { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: var(--text); text-align: right; flex-shrink: 0; }
+.br-today { font-size: 10px; text-align: right; margin-top: 2px; font-weight: 600; }
+.br-today.up { color: var(--green); }
+.br-today.dn { color: var(--red); }
+.br-today.eq { color: var(--muted); }
+
+/* ── SCORING GUIDE ── */
+.scoring-wrap { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+.score-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.score-card-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.score-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.score-card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.score-card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.score-rules { padding: 8px 14px; }
+.score-rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.score-rule:last-child { border-bottom: none; }
+.rule-cond { color: var(--muted); }
+.rule-pts {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 8px;
+}
+.pts-gold   { background: rgba(245,200,66,0.15); color: var(--gold); }
+.pts-green  { background: rgba(74,222,128,0.12); color: var(--green); }
+.pts-red    { background: rgba(248,113,113,0.12); color: var(--red); }
+.pts-muted  { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(10,15,30,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  z-index: 100;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 12px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: all 0.2s;
+  min-width: 56px;
+}
+.nav-icon { font-size: 20px; line-height: 1; }
+.nav-label { font-size: 10px; color: var(--muted); font-weight: 500; transition: color 0.2s; }
+.nav-item.active .nav-label { color: var(--gold); }
+.nav-item.active .nav-icon { filter: drop-shadow(0 0 6px rgba(245,200,66,0.5)); }
+
+/* ── VIEWS ── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── UPDATE BANNER ── */
+.update-banner {
+  margin: 0 16px 12px;
+  background: rgba(96,165,250,0.08);
+  border: 1px solid rgba(96,165,250,0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.update-banner .info-icon { font-size: 14px; flex-shrink: 0; }
+
+/* ── STAGGER ANIMATIONS ── */
+.lb-card:nth-child(1) { animation-delay: 0.05s; }
+.lb-card:nth-child(2) { animation-delay: 0.10s; }
+.lb-card:nth-child(3) { animation-delay: 0.15s; }
+.lb-card:nth-child(4) { animation-delay: 0.20s; }
+.lb-card:nth-child(5) { animation-delay: 0.25s; }
+.lb-card:nth-child(n+6) { animation-delay: 0.30s; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-badge"><span class="dot"></span> LIVE CONTEST</div>
+      <h1>Branch<br><span>Leaderboard</span></h1>
+      <div class="header-sub">Kuwait Remittance · 53 Branches</div>
+    </div>
+    <div class="header-pool">
+      <div class="pool-label">Prize Pool</div>
+      <div class="pool-val">500</div>
+      <div class="pool-sub">KD Total</div>
+    </div>
+  </div>
+
+  <!-- TABS (only on leaderboard view) -->
+  <div class="tabs" id="lb-tabs">
+    <div class="tab active" onclick="setFilter('all')">All Branches</div>
+    <div class="tab" onclick="setFilter('A')">Area A</div>
+    <div class="tab" onclick="setFilter('B')">Area B</div>
+    <div class="tab" onclick="setFilter('C')">Area C</div>
+  </div>
+
+  <!-- VIEW: LEADERBOARD -->
+  <div class="view active" id="view-lb">
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip">
+      <div class="kpi" style="--accent: var(--gold)">
+        <div class="kpi-val" id="kpi-day">—</div>
+        <div class="kpi-label">Contest Day</div>
+      </div>
+      <div class="kpi" style="--accent: var(--purple)">
+        <div class="kpi-val" id="kpi-top">—</div>
+        <div class="kpi-label">Top Score</div>
+      </div>
+      <div class="kpi" style="--accent: var(--egypt)">
+        <div class="kpi-val" id="kpi-avg">—</div>
+        <div class="kpi-label">Avg Score</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Rankings</div>
+      <div class="section-sub" id="filter-label">All 53 branches</div>
+    </div>
+
+    <div class="lb-list" id="lb-list"></div>
+
+    <!-- Prize Banner -->
+    <div class="prize-banner">
+      <div class="prize-banner-title">🏆 Prize Structure</div>
+      <div class="prize-grid">
+        <div class="prize-item"><div class="prize-pos">1st</div><div class="prize-kd">KD 150</div></div>
+        <div class="prize-item"><div class="prize-pos">2nd</div><div class="prize-kd">KD 125</div></div>
+        <div class="prize-item"><div class="prize-pos">3rd</div><div class="prize-kd">KD 100</div></div>
+        <div class="prize-item"><div class="prize-pos">4th</div><div class="prize-kd">KD 75</div></div>
+        <div class="prize-item"><div class="prize-pos">5th</div><div class="prize-kd">KD 50</div></div>
+      </div>
+    </div>
+
+  </div><!-- /view-lb -->
+
+  <!-- VIEW: CORRIDORS -->
+  <div class="view" id="view-corridors">
+    <div class="update-banner">
+      <span class="info-icon">ℹ️</span>
+      Each corridor scores independently. Max +20 pts/week if both hit 120%+.
+    </div>
+
+    <div class="kpi-strip" style="grid-template-columns:1fr 1fr; margin-bottom:16px;">
+      <div class="kpi" style="--accent: var(--india)">
+        <div class="kpi-val" id="kpi-india-total">—</div>
+        <div class="kpi-label">Total India Pts</div>
+      </div>
+      <div class="kpi" style="--accent: var(--egypt)">
+        <div class="kpi-val" id="kpi-egypt-total">—</div>
+        <div class="kpi-label">Total Egypt Pts</div>
+      </div>
+    </div>
+
+    <div class="corridor-wrap">
+      <div class="corridor-card">
+        <div class="corridor-header india">
+          <span class="corridor-flag">🇮🇳</span>
+          <div>
+            <div class="corridor-title" style="color:var(--india)">India Corridor</div>
+          </div>
+          <div class="corridor-sub">Top 5 branches</div>
+        </div>
+        <div class="corridor-rows" id="india-rows"></div>
+      </div>
+
+      <div class="corridor-card">
+        <div class="corridor-header egypt">
+          <span class="corridor-flag">🇪🇬</span>
+          <div>
+            <div class="corridor-title" style="color:var(--egypt)">Egypt Corridor</div>
+          </div>
+          <div class="corridor-sub">Top 5 branches</div>
+        </div>
+        <div class="corridor-rows" id="egypt-rows"></div>
+      </div>
+    </div>
+  </div><!-- /view-corridors -->
+
+  <!-- VIEW: AREAS -->
+  <div class="view" id="view-areas">
+    <div class="section-header" style="margin-top:4px">
+      <div class="section-title">Area Scorecard</div>
+      <div class="section-sub">3 area managers</div>
+    </div>
+    <div class="area-cards" id="area-cards"></div>
+  </div><!-- /view-areas -->
+
+  <!-- VIEW: ALL BRANCHES -->
+  <div class="view" id="view-all">
+    <div class="branch-table-wrap">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search branch name…" oninput="filterBranches(this.value)" id="search-input">
+      </div>
+      <div id="all-branches"></div>
+    </div>
+  </div><!-- /view-all -->
+
+  <!-- VIEW: SCORING -->
+  <div class="view" id="view-scoring">
+    <div class="section-header" style="margin-top:4px">
+      <div class="section-title">Scoring Guide</div>
+      <div class="section-sub">How points are earned</div>
+    </div>
+    <div class="scoring-wrap">
+
+      <div class="score-card">
+        <div class="score-card-header">
+          <div class="score-icon" style="background:rgba(167,139,250,0.15);">📅</div>
+          <div>
+            <div class="score-card-title">A · Daily Target</div>
+            <div class="score-card-sub">Based on daily remittance count</div>
+          </div>
+        </div>
+        <div class="score-rules">
+          <div class="score-rule"><span class="rule-cond">120% or above</span><span class="rule-pts pts-green">+2 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">100% to 119%</span><span class="rule-pts pts-gold">+1 pt</span></div>
+          <div class="score-rule"><span class="rule-cond">80% to 99%</span><span class="rule-pts pts-muted">0 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">Below 80%</span><span class="rule-pts pts-red">−1 pt</span></div>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-header">
+          <div class="score-icon" style="background:rgba(255,124,42,0.15);">🇮🇳</div>
+          <div>
+            <div class="score-card-title">B · India Corridor</div>
+            <div class="score-card-sub">Weekly · scored separately</div>
+          </div>
+        </div>
+        <div class="score-rules">
+          <div class="score-rule"><span class="rule-cond">120% or above</span><span class="rule-pts pts-green">+10 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">100% to 119%</span><span class="rule-pts pts-gold">+5 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">Below 100%</span><span class="rule-pts pts-muted">0 pts</span></div>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-header">
+          <div class="score-icon" style="background:rgba(34,201,135,0.15);">🇪🇬</div>
+          <div>
+            <div class="score-card-title">B · Egypt Corridor</div>
+            <div class="score-card-sub">Weekly · scored separately</div>
+          </div>
+        </div>
+        <div class="score-rules">
+          <div class="score-rule"><span class="rule-cond">120% or above</span><span class="rule-pts pts-green">+10 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">100% to 119%</span><span class="rule-pts pts-gold">+5 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">Below 100%</span><span class="rule-pts pts-muted">0 pts</span></div>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-header">
+          <div class="score-icon" style="background:rgba(34,201,135,0.1);">♻️</div>
+          <div>
+            <div class="score-card-title">C · Win-back</div>
+            <div class="score-card-sub">Added at end of month</div>
+          </div>
+        </div>
+        <div class="score-rules">
+          <div class="score-rule"><span class="rule-cond">Each inactive customer reactivated</span><span class="rule-pts pts-gold">+1 pt</span></div>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-header">
+          <div class="score-icon" style="background:rgba(245,200,66,0.12);">🎯</div>
+          <div>
+            <div class="score-card-title">D · Monthly Bonus</div>
+            <div class="score-card-sub">Based on monthly remittance target</div>
+          </div>
+        </div>
+        <div class="score-rules">
+          <div class="score-rule"><span class="rule-cond">120% or above</span><span class="rule-pts pts-green">+40 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">110% to 119%</span><span class="rule-pts pts-gold">+30 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">100% to 109%</span><span class="rule-pts pts-gold">+20 pts</span></div>
+          <div class="score-rule"><span class="rule-cond">Below 100%</span><span class="rule-pts pts-muted">0 pts</span></div>
+        </div>
+      </div>
+
+      <div class="prize-banner" style="margin:0 0 16px;">
+        <div class="prize-banner-title">🏆 Prize Structure · KD 500 Total</div>
+        <div class="prize-grid">
+          <div class="prize-item"><div class="prize-pos">1st</div><div class="prize-kd">KD 150</div></div>
+          <div class="prize-item"><div class="prize-pos">2nd</div><div class="prize-kd">KD 125</div></div>
+          <div class="prize-item"><div class="prize-pos">3rd</div><div class="prize-kd">KD 100</div></div>
+          <div class="prize-item"><div class="prize-pos">4th</div><div class="prize-kd">KD 75</div></div>
+          <div class="prize-item"><div class="prize-pos">5th</div><div class="prize-kd">KD 50</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /view-scoring -->
+
+</div><!-- /app -->
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showView('lb')" id="nav-lb">
+    <div class="nav-icon">🏆</div>
+    <div class="nav-label">Leaderboard</div>
+  </div>
+  <div class="nav-item" onclick="showView('corridors')" id="nav-corridors">
+    <div class="nav-icon">✈️</div>
+    <div class="nav-label">Corridors</div>
+  </div>
+  <div class="nav-item" onclick="showView('areas')" id="nav-areas">
+    <div class="nav-icon">📊</div>
+    <div class="nav-label">Areas</div>
+  </div>
+  <div class="nav-item" onclick="showView('all')" id="nav-all">
+    <div class="nav-icon">📋</div>
+    <div class="nav-label">All Branches</div>
+  </div>
+  <div class="nav-item" onclick="showView('scoring')" id="nav-scoring">
+    <div class="nav-icon">📖</div>
+    <div class="nav-label">Scoring</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA — paste updated scores here each day from your Excel file
+// Format: { name, area, totalPts, dailyPts, indiaPts, egyptPts, winbackPts, bonusPts, todayAch }
+// todayAch: today's achievement % as decimal (e.g. 1.25 = 125%)
+// ═══════════════════════════════════════════════════════════════════
+const BRANCHES = [
+  {name:"Salmiya Main",      area:"A", totalPts:87, dailyPts:22, indiaPts:30, egyptPts:25, winbackPts:5,  bonusPts:0,  todayAch:1.28},
+  {name:"Hawalli Centre",    area:"B", totalPts:82, dailyPts:20, indiaPts:25, egyptPts:20, winbackPts:7,  bonusPts:0,  todayAch:1.05},
+  {name:"Farwaniya",         area:"B", totalPts:79, dailyPts:18, indiaPts:30, egyptPts:20, winbackPts:6,  bonusPts:0,  todayAch:1.22},
+  {name:"Jahra",             area:"A", totalPts:76, dailyPts:16, indiaPts:25, egyptPts:25, winbackPts:5,  bonusPts:0,  todayAch:0.95},
+  {name:"Mangaf",            area:"C", totalPts:74, dailyPts:18, indiaPts:20, egyptPts:25, winbackPts:6,  bonusPts:0,  todayAch:1.31},
+  {name:"Rumaithiya",        area:"A", totalPts:68, dailyPts:14, indiaPts:20, egyptPts:20, winbackPts:4,  bonusPts:0,  todayAch:1.01},
+  {name:"Sabah Al Salem",    area:"B", totalPts:65, dailyPts:15, indiaPts:15, egyptPts:25, winbackPts:5,  bonusPts:0,  todayAch:0.88},
+  {name:"Khaitan",           area:"A", totalPts:62, dailyPts:16, indiaPts:20, egyptPts:15, winbackPts:6,  bonusPts:0,  todayAch:1.19},
+  {name:"Fahaheel",          area:"B", totalPts:60, dailyPts:14, indiaPts:20, egyptPts:15, winbackPts:6,  bonusPts:0,  todayAch:0.92},
+  {name:"Bneid Al Gar",      area:"B", totalPts:58, dailyPts:12, indiaPts:20, egyptPts:15, winbackPts:6,  bonusPts:0,  todayAch:0.75},
+  {name:"Abu Halifa",        area:"C", totalPts:55, dailyPts:13, indiaPts:15, egyptPts:15, winbackPts:7,  bonusPts:0,  todayAch:1.10},
+  {name:"Salwa",             area:"A", totalPts:52, dailyPts:12, indiaPts:15, egyptPts:15, winbackPts:5,  bonusPts:0,  todayAch:1.00},
+  {name:"Mubarak Al Kabeer", area:"C", totalPts:50, dailyPts:12, indiaPts:15, egyptPts:15, winbackPts:3,  bonusPts:0,  todayAch:0.85},
+  {name:"Qurain",            area:"B", totalPts:49, dailyPts:11, indiaPts:15, egyptPts:15, winbackPts:3,  bonusPts:0,  todayAch:1.15},
+  {name:"Mahboula",          area:"B", totalPts:47, dailyPts:11, indiaPts:15, egyptPts:10, winbackPts:6,  bonusPts:0,  todayAch:0.79},
+  {name:"Ahmadi",            area:"B", totalPts:45, dailyPts:10, indiaPts:10, egyptPts:15, winbackPts:5,  bonusPts:0,  todayAch:0.82},
+  {name:"Ardiya",            area:"A", totalPts:43, dailyPts:10, indiaPts:15, egyptPts:10, winbackPts:3,  bonusPts:0,  todayAch:1.05},
+  {name:"Sulaibiya",         area:"B", totalPts:41, dailyPts:9,  indiaPts:10, egyptPts:15, winbackPts:2,  bonusPts:0,  todayAch:0.90},
+  {name:"Mishref",           area:"A", totalPts:39, dailyPts:9,  indiaPts:10, egyptPts:10, winbackPts:5,  bonusPts:0,  todayAch:1.02},
+  {name:"Fintas",            area:"B", totalPts:38, dailyPts:8,  indiaPts:15, egyptPts:10, winbackPts:0,  bonusPts:0,  todayAch:0.95},
+  {name:"Shuwaikh",          area:"A", totalPts:36, dailyPts:10, indiaPts:10, egyptPts:10, winbackPts:1,  bonusPts:0,  todayAch:1.24},
+  {name:"Hawalli South",     area:"B", totalPts:35, dailyPts:8,  indiaPts:10, egyptPts:10, winbackPts:2,  bonusPts:0,  todayAch:0.83},
+  {name:"Adan",              area:"B", totalPts:34, dailyPts:7,  indiaPts:10, egyptPts:10, winbackPts:2,  bonusPts:0,  todayAch:0.76},
+  {name:"Doha",              area:"C", totalPts:33, dailyPts:8,  indiaPts:10, egyptPts:10, winbackPts:0,  bonusPts:0,  todayAch:1.00},
+  {name:"Jleeb Al Shuyoukh", area:"C", totalPts:32, dailyPts:7,  indiaPts:10, egyptPts:10, winbackPts:0,  bonusPts:0,  todayAch:1.12},
+  {name:"Kaifan",            area:"A", totalPts:31, dailyPts:7,  indiaPts:10, egyptPts:10, winbackPts:0,  bonusPts:0,  todayAch:0.87},
+  {name:"Bayan",             area:"C", totalPts:30, dailyPts:7,  indiaPts:10, egyptPts:5,  winbackPts:3,  bonusPts:0,  todayAch:0.94},
+  {name:"Egaila",            area:"B", totalPts:29, dailyPts:6,  indiaPts:10, egyptPts:10, winbackPts:3,  bonusPts:0,  todayAch:1.05},
+  {name:"Rai",               area:"C", totalPts:28, dailyPts:6,  indiaPts:5,  egyptPts:10, winbackPts:2,  bonusPts:0,  todayAch:0.81},
+  {name:"Khaldiya",          area:"C", totalPts:27, dailyPts:6,  indiaPts:10, egyptPts:5,  winbackPts:1,  bonusPts:0,  todayAch:1.08},
+  {name:"Ali Sabah Al Salem", area:"B",totalPts:26, dailyPts:6,  indiaPts:10, egyptPts:5,  winbackPts:0,  bonusPts:0,  todayAch:0.88},
+  {name:"Nuzha",             area:"A", totalPts:25, dailyPts:5,  indiaPts:10, egyptPts:5,  winbackPts:0,  bonusPts:0,  todayAch:0.93},
+  {name:"Mishref South",     area:"C", totalPts:24, dailyPts:5,  indiaPts:5,  egyptPts:10, winbackPts:4,  bonusPts:0,  todayAch:0.98},
+  {name:"Sabahiya",          area:"B", totalPts:23, dailyPts:5,  indiaPts:5,  egyptPts:10, winbackPts:3,  bonusPts:0,  todayAch:1.02},
+  {name:"Rawda",             area:"C", totalPts:22, dailyPts:5,  indiaPts:5,  egyptPts:5,  winbackPts:2,  bonusPts:0,  todayAch:0.85},
+  {name:"Surra",             area:"A", totalPts:21, dailyPts:4,  indiaPts:5,  egyptPts:10, winbackPts:2,  bonusPts:0,  todayAch:0.79},
+  {name:"Faiha",             area:"C", totalPts:20, dailyPts:4,  indiaPts:5,  egyptPts:5,  winbackPts:6,  bonusPts:0,  todayAch:1.00},
+  {name:"Siddiq",            area:"C", totalPts:19, dailyPts:4,  indiaPts:5,  egyptPts:5,  winbackPts:5,  bonusPts:0,  todayAch:0.88},
+  {name:"Rigai",             area:"C", totalPts:18, dailyPts:3,  indiaPts:5,  egyptPts:5,  winbackPts:5,  bonusPts:0,  todayAch:0.94},
+  {name:"Zahra",             area:"C", totalPts:17, dailyPts:3,  indiaPts:5,  egyptPts:5,  winbackPts:4,  bonusPts:0,  todayAch:1.03},
+  {name:"Adailiya",          area:"C", totalPts:16, dailyPts:3,  indiaPts:5,  egyptPts:5,  winbackPts:3,  bonusPts:0,  todayAch:0.76},
+  {name:"Abbasiya",          area:"A", totalPts:15, dailyPts:3,  indiaPts:5,  egyptPts:5,  winbackPts:2,  bonusPts:0,  todayAch:0.82},
+  {name:"Riqqa",             area:"B", totalPts:14, dailyPts:2,  indiaPts:5,  egyptPts:5,  winbackPts:2,  bonusPts:0,  todayAch:0.90},
+  {name:"Hadiya",            area:"B", totalPts:13, dailyPts:2,  indiaPts:5,  egyptPts:5,  winbackPts:1,  bonusPts:0,  todayAch:0.97},
+  {name:"West Ahmadi",       area:"B", totalPts:12, dailyPts:2,  indiaPts:5,  egyptPts:5,  winbackPts:0,  bonusPts:0,  todayAch:0.83},
+  {name:"Shamiya",           area:"C", totalPts:11, dailyPts:2,  indiaPts:5,  egyptPts:0,  winbackPts:4,  bonusPts:0,  todayAch:0.78},
+  {name:"Fahad Al Ahmad",    area:"B", totalPts:10, dailyPts:2,  indiaPts:5,  egyptPts:0,  winbackPts:3,  bonusPts:0,  todayAch:0.92},
+  {name:"Wafra",             area:"B", totalPts:9,  dailyPts:1,  indiaPts:5,  egyptPts:0,  winbackPts:3,  bonusPts:0,  todayAch:0.86},
+  {name:"Daiya",             area:"A", totalPts:8,  dailyPts:1,  indiaPts:5,  egyptPts:0,  winbackPts:2,  bonusPts:0,  todayAch:0.74},
+  {name:"Qadsiya",           area:"A", totalPts:7,  dailyPts:1,  indiaPts:5,  egyptPts:0,  winbackPts:1,  bonusPts:0,  todayAch:0.80},
+  {name:"Sulaibikhat",       area:"C", totalPts:6,  dailyPts:1,  indiaPts:0,  egyptPts:5,  winbackPts:0,  bonusPts:0,  todayAch:0.95},
+  {name:"Shuhada",           area:"C", totalPts:5,  dailyPts:0,  indiaPts:0,  egyptPts:5,  winbackPts:0,  bonusPts:0,  todayAch:0.88},
+  {name:"Kaifan South",      area:"A", totalPts:4,  dailyPts:0,  indiaPts:0,  egyptPts:0,  winbackPts:4,  bonusPts:0,  todayAch:0.72},
+];
+
+// Sort by total points descending
+const sorted = [...BRANCHES].sort((a,b) => b.totalPts - a.totalPts);
+const ranked = sorted.map((b,i) => ({...b, rank: i+1}));
+
+let currentFilter = 'all';
+
+// ── Navigation ──────────────────────────────────────────────────────
+function showView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.getElementById('nav-'+v).classList.add('active');
+  document.getElementById('lb-tabs').style.display = v==='lb' ? 'flex' : 'none';
+  if (v==='lb') renderLB();
+  if (v==='corridors') renderCorridors();
+  if (v==='areas') renderAreas();
+  if (v==='all') renderAll();
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['all','A','B','C'][i]===f));
+  const lbl = f==='all' ? 'All 53 branches' : `Area ${f} branches`;
+  document.getElementById('filter-label').textContent = lbl;
+  renderLB();
+}
+
+// ── KPIs ────────────────────────────────────────────────────────────
+const d = new Date();
+document.getElementById('kpi-day').textContent = d.getDate();
+document.getElementById('kpi-top').textContent = ranked[0].totalPts;
+const avg = Math.round(BRANCHES.reduce((s,b)=>s+b.totalPts,0)/BRANCHES.length*10)/10;
+document.getElementById('kpi-avg').textContent = avg;
+
+const indiaTot = BRANCHES.reduce((s,b)=>s+b.indiaPts,0);
+const egyptTot = BRANCHES.reduce((s,b)=>s+b.egyptPts,0);
+document.getElementById('kpi-india-total').textContent = indiaTot;
+document.getElementById('kpi-egypt-total').textContent = egyptTot;
+
+// ── Leaderboard ─────────────────────────────────────────────────────
+function renderLB() {
+  const list = document.getElementById('lb-list');
+  const data = currentFilter==='all' ? ranked : ranked.filter(b=>b.area===currentFilter);
+  const prizes = {1:'KD 150',2:'KD 125',3:'KD 100',4:'KD 75',5:'KD 50'};
+
+  list.innerHTML = data.map((b,idx) => {
+    const displayRank = currentFilter==='all' ? b.rank : idx+1;
+    const rankClass = b.rank<=3 ? `rank-${b.rank}` : '';
+    const badgeClass = b.rank===1?'r1':b.rank===2?'r2':b.rank===3?'r3':'rn';
+    const ptsClass = b.rank===1?'t1':b.rank===2?'t2':b.rank===3?'t3':'tn';
+    const prize = prizes[b.rank] || '';
+    const hasPrize = !!prize;
+
+    const todayPts = b.todayAch >= 1.2 ? 2 : b.todayAch >= 1.0 ? 1 : b.todayAch >= 0.8 ? 0 : -1;
+    const todayLabel = todayPts > 0 ? `+${todayPts} today` : todayPts < 0 ? `${todayPts} today` : `0 today`;
+    const achPct = Math.round(b.todayAch*100);
+
+    return `<div class="lb-card ${rankClass}" onclick="">
+      <div class="rank-badge ${badgeClass}">${displayRank}</div>
+      <div class="lb-info">
+        <div class="lb-name">${b.name}</div>
+        <div class="lb-area">Area ${b.area} · Today: ${achPct}% (${todayLabel})</div>
+        <div class="lb-pts-breakdown">
+          <span class="lb-pill pill-daily">Daily +${b.dailyPts}</span>
+          <span class="lb-pill pill-india">🇮🇳 ${b.indiaPts}</span>
+          <span class="lb-pill pill-egypt">🇪🇬 ${b.egyptPts}</span>
+          ${b.bonusPts ? `<span class="lb-pill pill-bonus">Bonus +${b.bonusPts}</span>` : ''}
+        </div>
+      </div>
+      <div class="lb-total">
+        <div class="lb-total-pts ${ptsClass}">${b.totalPts}</div>
+        <div class="lb-prize ${hasPrize?'has-prize':''}">${prize || `#${b.rank}`}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Corridors ───────────────────────────────────────────────────────
+function renderCorridors() {
+  const topIndia = [...BRANCHES].sort((a,b)=>b.indiaPts-a.indiaPts).slice(0,5);
+  const topEgypt = [...BRANCHES].sort((a,b)=>b.egyptPts-a.egyptPts).slice(0,5);
+  const maxI = topIndia[0].indiaPts || 1;
+  const maxE = topEgypt[0].egyptPts || 1;
+
+  document.getElementById('india-rows').innerHTML = topIndia.map((b,i) =>
+    `<div class="corridor-row">
+      <div class="cr-rank">${i+1}</div>
+      <div class="cr-name">${b.name}</div>
+      <div class="cr-bar-wrap"><div class="cr-bar india" style="width:${Math.round(b.indiaPts/maxI*100)}%"></div></div>
+      <div class="cr-pts india">${b.indiaPts}</div>
+    </div>`).join('');
+
+  document.getElementById('egypt-rows').innerHTML = topEgypt.map((b,i) =>
+    `<div class="corridor-row">
+      <div class="cr-rank">${i+1}</div>
+      <div class="cr-name">${b.name}</div>
+      <div class="cr-bar-wrap"><div class="cr-bar egypt" style="width:${Math.round(b.egyptPts/maxE*100)}%"></div></div>
+      <div class="cr-pts egypt">${b.egyptPts}</div>
+    </div>`).join('');
+}
+
+// ── Areas ────────────────────────────────────────────────────────────
+function renderAreas() {
+  const areas = ['A','B','C'];
+  const names = {'A':'North Region','B':'Central Region','C':'South Region'};
+  const mgrs  = {'A':'Area Manager A','B':'Area Manager B','C':'Area Manager C'};
+  const colors = {'A':'#60a5fa','B':'#a78bfa','C':'#22c987'};
+
+  const areaData = areas.map(a => {
+    const branches = BRANCHES.filter(b=>b.area===a);
+    const total = branches.reduce((s,b)=>s+b.totalPts,0);
+    const avg = (total/branches.length).toFixed(1);
+    const leader = [...branches].sort((x,y)=>y.totalPts-x.totalPts)[0];
+    return {a, total, avg, leader, count: branches.length};
+  }).sort((x,y)=>y.total-x.total);
+
+  const maxPts = areaData[0].total;
+
+  document.getElementById('area-cards').innerHTML = areaData.map((d,i) =>
+    `<div class="area-card">
+      <div class="area-bar-col">
+        <div class="area-bar-bg">
+          <div class="area-bar-fill" style="height:${Math.round(d.total/maxPts*100)}%;background:${colors[d.a]}"></div>
+        </div>
+        <div class="area-rank-badge">#${i+1}</div>
+      </div>
+      <div class="area-info">
+        <div class="area-name" style="color:${colors[d.a]}">${names[d.a]}</div>
+        <div class="area-mgr">${mgrs[d.a]} · ${d.count} branches</div>
+        <div class="area-stats">
+          <div><div class="area-stat-val" style="color:${colors[d.a]}">${d.total}</div><div class="area-stat-label">Total Pts</div></div>
+          <div><div class="area-stat-val">${d.avg}</div><div class="area-stat-label">Avg / Branch</div></div>
+        </div>
+        <div class="area-leader">Leader: <span>${d.leader.name} (${d.leader.totalPts} pts)</span></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── All Branches ─────────────────────────────────────────────────────
+function renderAll(filter='') {
+  const data = ranked.filter(b => !filter || b.name.toLowerCase().includes(filter.toLowerCase()));
+  const maxPts = ranked[0].totalPts;
+
+  document.getElementById('all-branches').innerHTML = data.map(b => {
+    const todayPts = b.todayAch >= 1.2 ? 2 : b.todayAch >= 1.0 ? 1 : b.todayAch >= 0.8 ? 0 : -1;
+    const todayCls = todayPts > 0 ? 'up' : todayPts < 0 ? 'dn' : 'eq';
+    const todayStr = todayPts > 0 ? `+${todayPts}` : `${todayPts}`;
+    const pct = Math.round(b.totalPts/maxPts*100);
+    return `<div class="branch-row">
+      <div class="br-rank ${b.rank<=5?'top5':''}">${b.rank}</div>
+      <div class="br-info">
+        <div class="br-name">${b.name}</div>
+        <div class="br-area">Area ${b.area}</div>
+      </div>
+      <div class="br-bar-col">
+        <div class="br-bar-bg"><div class="br-bar-fill" style="width:${pct}%"></div></div>
+        <div class="br-ach">${Math.round(b.todayAch*100)}% today</div>
+      </div>
+      <div>
+        <div class="br-pts">${b.totalPts}</div>
+        <div class="br-today ${todayCls}">${todayStr} today</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterBranches(val) { renderAll(val); }
+
+// ── Init ─────────────────────────────────────────────────────────────
+renderLB();
+renderCorridors();
+renderAreas();
+renderAll();
+</script>
+</body>
+</html>
